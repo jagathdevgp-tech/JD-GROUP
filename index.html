@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Jagath Dinesh (JD) — Electrical & Computer Engineer, Entrepreneur of the Year, CEO of JD Groups."/>
+  <title>JD | Jagath Dinesh — JD Groups</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --cr:#dc143c; --cr2:#ff2a52; --dark:#07070b; --darker:#050508;
+      --glass:rgba(255,255,255,0.04); --gb:rgba(255,255,255,0.07);
+      --muted:#7a7a8e; --sw:290px;
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',sans-serif;color:#fff;background:var(--dark);display:flex;overflow:hidden;height:100vh}
+
+    /* ── CANVAS BG ── */
+    #bgc{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+    /* ══════════════════ SIDEBAR ══════════════════ */
+    .sb{
+      width:var(--sw);height:100vh;flex-shrink:0;
+      background:rgba(5,5,8,.96);
+      border-right:1px solid var(--gb);
+      display:flex;flex-direction:column;
+      z-index:200;position:relative;
+      overflow:hidden;
+    }
+
+    /* brand */
+    .brand{padding:32px 26px 24px;border-bottom:1px solid var(--gb)}
+    .brand-jd{
+      font-family:'Calibri','Segoe UI',sans-serif;
+      font-size:64px;font-weight:900;line-height:1;
+      letter-spacing:-3px;margin-bottom:10px;
+    }
+    .brand-jd .bj{
+      color:transparent;
+      -webkit-text-stroke:2px #2e2e3e;
+      text-shadow:2px 2px 0 #1a1a26;
+    }
+    .brand-jd .bd{color:var(--cr);text-shadow:0 0 40px rgba(220,20,60,.7),0 0 80px rgba(220,20,60,.3)}
+    .brand-sub{font-size:9px;font-weight:700;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase;line-height:1.6}
+
+    /* nav */
+    nav{padding:28px 0;flex:1;overflow-y:auto}
+    nav::-webkit-scrollbar{width:2px}
+    nav::-webkit-scrollbar-thumb{background:var(--cr)}
+    nav ul{list-style:none}
+    nav a{
+      display:flex;align-items:center;gap:14px;
+      padding:13px 26px;text-decoration:none;
+      color:var(--muted);font-size:10.5px;font-weight:700;
+      letter-spacing:2px;text-transform:uppercase;
+      transition:all .28s;position:relative;overflow:hidden;
+    }
+    nav a .nb{font-size:9px;color:rgba(255,255,255,.18);font-weight:400;min-width:18px}
+    nav a::before{
+      content:'';position:absolute;left:0;top:0;bottom:0;
+      width:3px;background:var(--cr);
+      transform:scaleY(0);transition:transform .28s;border-radius:0 3px 3px 0;
+    }
+    nav a:hover,nav a.active{color:#fff;background:rgba(220,20,60,.06)}
+    nav a:hover::before,nav a.active::before{transform:scaleY(1)}
+
+    /* sidebar HQ photo */
+    .sb-img{
+      position:relative;flex-shrink:0;height:175px;overflow:hidden;
+      border-top:1px solid var(--gb);
+    }
+    .sb-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.6) saturate(.7);transition:.4s}
+    .sb-img:hover img{filter:brightness(.88) saturate(1)}
+    .sb-img-tag{
+      position:absolute;bottom:10px;left:12px;
+      font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+      color:rgba(255,255,255,.85);
+    }
+    .sb-img-tag span{color:var(--cr)}
+
+    /* ══════════════════ MAIN ══════════════════ */
+    .main{
+      flex:1;height:100vh;
+      overflow-y:scroll;scroll-snap-type:y mandatory;
+      position:relative;z-index:1;
+    }
+    .main::-webkit-scrollbar{width:3px}
+    .main::-webkit-scrollbar-thumb{background:var(--cr);border-radius:2px}
+
+    /* progress dots */
+    .dots{
+      position:fixed;right:16px;top:50%;transform:translateY(-50%);
+      z-index:300;display:flex;flex-direction:column;gap:10px;
+    }
+    .dot{
+      width:5px;height:5px;border-radius:50%;
+      background:rgba(255,255,255,.18);cursor:pointer;
+      transition:all .3s;
+    }
+    .dot.on{background:var(--cr);height:18px;border-radius:3px}
+    .dot:hover{background:rgba(220,20,60,.6)}
+
+    /* ══════════════════ SLIDES ══════════════════ */
+    .slide{height:100vh;scroll-snap-align:start;display:flex;align-items:center;position:relative;overflow:hidden}
+    .si{width:100%;height:100%;padding:0 56px;display:flex;align-items:center;position:relative;z-index:2}
+
+    /* shared headings */
+    .eyebrow{font-size:9.5px;letter-spacing:5px;color:var(--cr);font-weight:700;text-transform:uppercase;margin-bottom:14px}
+    .sh{font-size:clamp(32px,3.6vw,50px);font-weight:900;line-height:1.08;letter-spacing:-1.5px;margin-bottom:0}
+    .sh::after{content:'';display:block;width:46px;height:4px;background:var(--cr);margin-top:14px;border-radius:2px}
+
+    /* ── SLIDE 1 ── */
+    #s1{background:radial-gradient(ellipse at 70% 50%,#130610 0%,var(--dark) 70%)}
+    #s1 .si{flex-direction:column;align-items:flex-start;justify-content:center}
+
+    .h1-eye{font-size:10px;letter-spacing:6px;color:var(--cr);font-weight:700;text-transform:uppercase;
+      margin-bottom:22px;opacity:0;animation:up .8s .1s forwards}
+    .h1-title{font-size:clamp(58px,7.5vw,100px);font-weight:900;line-height:.95;
+      letter-spacing:-4px;margin-bottom:28px;opacity:0;animation:up .8s .3s forwards}
+    .h1-title em{color:var(--cr);font-style:normal;display:block}
+    .h1-body{font-size:17px;color:var(--muted);max-width:500px;line-height:1.85;
+      margin-bottom:44px;opacity:0;animation:up .8s .5s forwards}
+    .pills{display:flex;gap:12px;flex-wrap:wrap;opacity:0;animation:up .8s .7s forwards}
+    .pill{
+      padding:9px 20px;border:1px solid var(--gb);border-radius:30px;
+      font-size:11.5px;font-weight:600;letter-spacing:.5px;color:var(--muted);
+      background:var(--glass);backdrop-filter:blur(10px);transition:all .3s;cursor:default;
+    }
+    .pill:hover{border-color:var(--cr);color:#fff;background:rgba(220,20,60,.1)}
+    .pill.red{border-color:rgba(220,20,60,.5);color:var(--cr)}
+
+    /* right decoration */
+    .s1r{position:absolute;right:0;top:0;bottom:0;width:42%;
+      display:flex;align-items:center;justify-content:center;pointer-events:none}
+    .ring{position:absolute;border-radius:50%;border:1px solid rgba(220,20,60,.12);animation:spin 20s linear infinite}
+    .ring:nth-child(2){width:280px;height:280px;animation-direction:reverse;animation-duration:13s;border-color:rgba(220,20,60,.07)}
+    .ring:nth-child(3){width:180px;height:180px;animation-duration:9s}
+    .ring:nth-child(1){width:400px;height:400px}
+    .rjd{font-size:130px;font-weight:900;color:rgba(255,255,255,.025);
+      font-family:'Calibri',sans-serif;letter-spacing:-6px;user-select:none}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes up{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+    /* ── SLIDE 2 ── */
+    #s2{background:#08080c}
+    #s2 .si{gap:44px}
+
+    .s2l{flex:1;min-width:0}
+    .s2r{flex:0 0 420px;display:flex;flex-direction:column;gap:14px}
+
+    .acc-list{display:flex;flex-direction:column;gap:12px;margin:26px 0 26px}
+    .acc{
+      display:flex;align-items:center;gap:14px;
+      padding:14px 18px;background:var(--glass);
+      border:1px solid var(--gb);border-radius:12px;
+      transition:all .3s;cursor:default;
+    }
+    .acc:hover{background:rgba(220,20,60,.07);border-color:rgba(220,20,60,.3);transform:translateX(6px)}
+    .acc .ic{font-size:26px;flex-shrink:0}
+    .acc strong{display:block;font-size:14px;font-weight:700;margin-bottom:3px}
+    .acc span{font-size:12px;color:var(--muted)}
+
+    /* slide 2 images */
+    .s2-portrait{
+      border-radius:14px;overflow:hidden;height:340px;
+      border:1px solid var(--gb);box-shadow:0 20px 60px rgba(0,0,0,.6);
+    }
+    .s2-portrait img{width:100%;height:100%;object-fit:cover;object-position:top;transition:.5s}
+    .s2-portrait:hover img{transform:scale(1.05)}
+
+    .s2-export{
+      border-radius:14px;overflow:hidden;height:200px;
+      border:2px solid rgba(220,20,60,.4);box-shadow:0 10px 40px rgba(220,20,60,.2);
+    }
+    .s2-export img{width:100%;height:100%;object-fit:cover;transition:.5s}
+    .s2-export:hover img{transform:scale(1.05)}
+
+    /* animated map */
+    .mapbox{background:var(--glass);border:1px solid var(--gb);border-radius:12px;padding:14px;margin-top:4px}
+    .mapbox h4{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:10px}
+    .mapsvg{border-radius:8px;overflow:hidden;background:#0b0b12}
+
+    /* ── SLIDE 3 ── */
+    #s3{background:linear-gradient(160deg,#08080c 0%,#0d0812 100%)}
+    #s3 .si{flex-direction:column;align-items:flex-start;justify-content:center}
+
+    .tl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;width:100%;margin-top:44px}
+    .tlc{
+      background:var(--glass);border:1px solid var(--gb);border-radius:16px;
+      padding:26px 22px;position:relative;overflow:hidden;transition:all .38s;cursor:default;
+    }
+    .tlc::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:3px;
+      background:linear-gradient(90deg,var(--cr),transparent);
+      transform:scaleX(0);transform-origin:left;transition:transform .38s;
+    }
+    .tlc:hover{transform:translateY(-9px);background:rgba(255,255,255,.06);border-color:rgba(220,20,60,.35)}
+    .tlc:hover::before{transform:scaleX(1)}
+    .tl-dot{position:absolute;top:18px;right:18px;width:8px;height:8px;
+      border-radius:50%;background:var(--cr);box-shadow:0 0 14px var(--cr)}
+    .tl-yr{font-size:40px;font-weight:900;color:var(--cr);letter-spacing:-2px;line-height:1;margin-bottom:14px;
+      text-shadow:0 0 30px rgba(220,20,60,.35)}
+    .tlc h3{font-size:15px;font-weight:700;margin-bottom:9px}
+    .tlc p{font-size:12.5px;color:var(--muted);line-height:1.75}
+
+    /* ── SLIDE 4 ── */
+    #s4{background:#08080c}
+    #s4 .si{flex-direction:column;align-items:flex-start;justify-content:center}
+
+    .div-grid{display:flex;gap:24px;width:100%;margin-top:42px}
+    .dc{
+      flex:1;border-radius:18px;overflow:hidden;
+      background:var(--glass);border:1px solid var(--gb);
+      transition:all .4s;cursor:default;
+    }
+    .dc:hover{transform:translateY(-12px);box-shadow:0 30px 70px rgba(0,0,0,.7);border-color:rgba(220,20,60,.4)}
+    .dc-img{height:230px;overflow:hidden;position:relative}
+    .dc-img img{width:100%;height:100%;object-fit:cover;transition:.6s;filter:brightness(.82)}
+    .dc:hover .dc-img img{transform:scale(1.09);filter:brightness(1)}
+    .dc-img .dov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,transparent 60%)}
+    .dc-body{padding:26px}
+    .dc-tag{display:inline-block;font-size:9px;letter-spacing:3px;text-transform:uppercase;
+      color:var(--cr);font-weight:700;border:1px solid rgba(220,20,60,.4);
+      padding:4px 12px;border-radius:20px;margin-bottom:13px}
+    .dc-body h3{font-size:22px;font-weight:800;margin-bottom:11px}
+    .dc-body p{font-size:13px;color:var(--muted);line-height:1.75}
+    .dc-stats{margin-top:18px;padding-top:18px;border-top:1px solid var(--gb);display:flex;gap:16px}
+    .dcs{text-align:center;flex:1}
+    .dcs .n{font-size:20px;font-weight:800}
+    .dcs .l{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:3px}
+
+    /* ── SLIDE 5 ── */
+    #s5{background:linear-gradient(135deg,#07070b 0%,#0e080f 100%)}
+    #s5 .si{gap:56px}
+
+    .s5l{flex:1;min-width:0}
+    .s5r{flex:0 0 320px}
+
+    .s5-body{font-size:15px;color:var(--muted);line-height:1.9;margin:8px 0 36px}
+    .stats-g{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .sc{
+      background:var(--glass);border:1px solid var(--gb);border-radius:14px;
+      padding:28px 20px;text-align:center;position:relative;overflow:hidden;transition:all .3s;
+    }
+    .sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--cr)}
+    .sc:hover{transform:translateY(-6px);border-color:rgba(220,20,60,.4)}
+    .sc .sn{
+      font-size:52px;font-weight:900;letter-spacing:-2px;line-height:1;margin-bottom:8px;
+      background:linear-gradient(135deg,#fff,var(--cr));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    }
+    .sc .sl{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);font-weight:600}
+
+    .s5-img{border-radius:14px;overflow:hidden;height:500px;
+      border:1px solid var(--gb);box-shadow:0 20px 60px rgba(0,0,0,.6)}
+    .s5-img img{width:100%;height:100%;object-fit:cover;display:block;transition:.5s}
+    .s5-img:hover img{transform:scale(1.04)}
+
+    /* ── SLIDE 6 ── */
+    #s6{background:#07070b}
+    #s6 .si{flex-direction:column;align-items:center;justify-content:center;text-align:center}
+
+    .s6h{margin-bottom:44px}
+    .s6h .sh{font-size:clamp(36px,4vw,54px)}
+    .s6h .sh::after{margin:14px auto 0}
+    .s6h p{font-size:15px;color:var(--muted);max-width:460px;margin:18px auto 0;line-height:1.75}
+
+    .cform{
+      width:100%;max-width:540px;
+      background:var(--glass);border:1px solid var(--gb);
+      border-radius:18px;padding:38px;backdrop-filter:blur(20px);
+    }
+    .frow{display:flex;gap:14px}
+    .fg{flex:1;margin-bottom:16px}
+    .fg input,.fg textarea{
+      width:100%;background:rgba(255,255,255,.04);
+      border:1px solid var(--gb);border-radius:9px;
+      color:#fff;font-family:'Inter',sans-serif;font-size:13.5px;
+      padding:13px 16px;outline:none;transition:all .3s;resize:none;
+    }
+    .fg input:focus,.fg textarea:focus{border-color:var(--cr);background:rgba(220,20,60,.05)}
+    .fg input::placeholder,.fg textarea::placeholder{color:rgba(255,255,255,.22)}
+    .sbtn{
+      width:100%;padding:15px;background:var(--cr);border:none;border-radius:9px;
+      color:#fff;font-size:13px;font-weight:700;letter-spacing:2px;
+      text-transform:uppercase;cursor:pointer;transition:all .3s;
+    }
+    .sbtn:hover{background:var(--cr2);transform:translateY(-2px);box-shadow:0 12px 32px rgba(220,20,60,.4)}
+    .cfoot{margin-top:26px;font-size:11.5px;color:var(--muted);display:flex;gap:24px;justify-content:center}
+    .cfoot a{color:var(--muted);text-decoration:none;transition:color .3s}
+    .cfoot a:hover{color:var(--cr)}
+    .sep{color:rgba(255,255,255,.1)}
+  </style>
+</head>
+<body>
+
+<canvas id="bgc"></canvas>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sb">
+  <div class="brand">
+    <div class="brand-jd"><span class="bj">J</span><span class="bd">D</span></div>
+    <div class="brand-sub">Electrical &amp;<br>Computer Engineer</div>
+  </div>
+
+  <nav>
+    <ul>
+      <li><a href="#s1" class="active" data-i="0"><span class="nb">01</span>Home</a></li>
+      <li><a href="#s2" data-i="1"><span class="nb">02</span>Who is Jagath?</a></li>
+      <li><a href="#s3" data-i="2"><span class="nb">03</span>Timeline</a></li>
+      <li><a href="#s4" data-i="3"><span class="nb">04</span>Divisions</a></li>
+      <li><a href="#s5" data-i="4"><span class="nb">05</span>About Us</a></li>
+      <li><a href="#s6" data-i="5"><span class="nb">06</span>Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- JD Groups HQ — image 2 pinned in sidebar -->
+  <div class="sb-img">
+    <img src="image7.jpg" alt="JD Groups Headquarters"/>
+    <div class="sb-img-tag"><span>JD</span> Groups HQ</div>
+  </div>
+</aside>
+
+<!-- ═══ PROGRESS DOTS ═══ -->
+<div class="dots">
+  <div class="dot on" data-i="0"></div>
+  <div class="dot" data-i="1"></div>
+  <div class="dot" data-i="2"></div>
+  <div class="dot" data-i="3"></div>
+  <div class="dot" data-i="4"></div>
+  <div class="dot" data-i="5"></div>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<main class="main" id="main">
+
+  <!-- ▌S1 — TITLE -->
+  <section class="slide" id="s1">
+    <div class="si">
+      <div style="flex:1;padding-right:40px">
+        <div class="h1-eye">Jagath Dinesh · JD Groups · Est. 2030</div>
+        <h1 class="h1-title">Engineering<em>the Future.</em></h1>
+        <p class="h1-body">A multi-billion dollar conglomerate built on vision, innovation, and the relentless pursuit of excellence — spanning heavy mining, global logistics, and cutting-edge engineering.</p>
+        <div class="pills">
+          <div class="pill red">🏆 Entrepreneur of the Year</div>
+          <div class="pill">🌏 Australian of the Year</div>
+          <div class="pill">🎖️ Leadership Excellence</div>
+          <div class="pill">📡 Electrical &amp; Computer Engineer</div>
+        </div>
+      </div>
+      <div class="s1r">
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="rjd">JD</div>
+      </div>
+    </div>
+    <a href="#s2" style="position:absolute;bottom:36px;left:56px;display:flex;align-items:center;gap:10px;
+      text-decoration:none;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);
+      animation:bounce 2s 1.5s ease-in-out infinite">
+      <span style="width:28px;height:1px;background:var(--cr);display:block"></span> Explore
+    </a>
+  </section>
+
+  <!-- ▌S2 — WHO IS JAGATH -->
+  <section class="slide" id="s2">
+    <div class="si">
+      <!-- LEFT -->
+      <div class="s2l">
+        <div class="eyebrow">Profile · Leadership</div>
+        <h2 class="sh" style="margin-bottom:0">Who is Jagath?</h2>
+
+        <div class="acc-list">
+          <div class="acc">
+            <span class="ic">🏆</span>
+            <div><strong>Entrepreneur of the Year</strong><span>Transformational global business impact</span></div>
+          </div>
+          <div class="acc">
+            <span class="ic">🌏</span>
+            <div><strong>Australian of the Year</strong><span>Outstanding contribution to national growth</span></div>
+          </div>
+          <div class="acc">
+            <span class="ic">🎖️</span>
+            <div><strong>Leadership Excellence Award</strong><span>Top-tier leader across multi-billion enterprises</span></div>
+          </div>
+          <div class="acc">
+            <span class="ic">📡</span>
+            <div><strong>Electrical &amp; Computer Engineer</strong><span>Visionary technologist driving innovation</span></div>
+          </div>
+        </div>
+
+        <!-- ANIMATED WORLD MAP -->
+        <div class="mapbox">
+          <h4>🌐 JD Group — Global Presence</h4>
+          <div class="mapsvg">
+            <svg viewBox="0 0 780 280" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="mg" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#0f0f1a"/>
+                  <stop offset="100%" stop-color="#080810"/>
+                </radialGradient>
+              </defs>
+              <rect width="780" height="280" fill="url(#mg)"/>
+              <!-- grid -->
+              <line x1="0" y1="140" x2="780" y2="140" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+              <line x1="390" y1="0" x2="390" y2="280" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+              <line x1="0" y1="70" x2="780" y2="70" stroke="rgba(255,255,255,0.025)" stroke-width=".5"/>
+              <line x1="0" y1="210" x2="780" y2="210" stroke="rgba(255,255,255,0.025)" stroke-width=".5"/>
+              <line x1="195" y1="0" x2="195" y2="280" stroke="rgba(255,255,255,0.025)" stroke-width=".5"/>
+              <line x1="585" y1="0" x2="585" y2="280" stroke="rgba(255,255,255,0.025)" stroke-width=".5"/>
+              <!-- Continents -->
+              <path d="M60,44 L145,40 L162,65 L175,100 L155,130 L120,138 L80,120 L55,88Z" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+              <path d="M120,154 L162,148 L178,175 L172,218 L155,238 L132,228 L108,196 L100,170Z" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+              <path d="M320,44 L378,40 L395,62 L384,88 L355,92 L325,76Z" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+              <path d="M310,105 L382,94 L400,128 L406,178 L385,210 L355,218 L316,188 L295,148Z" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+              <!-- Asia -->
+              <path d="M405,36 L590,32 L628,60 L618,118 L565,140 L505,128 L445,108 L408,78Z" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+              <!-- India highlighted -->
+              <path d="M500,108 L526,103 L540,122 L535,158 L514,175 L494,162 L484,136Z" fill="rgba(220,20,60,0.28)" stroke="rgba(220,20,60,0.65)" stroke-width="1.5"/>
+              <!-- Australia -->
+              <path d="M570,170 L640,162 L668,188 L663,232 L628,248 L582,238 L552,212Z" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+
+              <!-- Animated routes -->
+              <line x1="512" y1="140" x2="620" y2="205">
+                <animate attributeName="stroke" values="rgba(220,20,60,0.5);rgba(220,20,60,0.1);rgba(220,20,60,0.5)" dur="2s" repeatCount="indefinite"/>
+                <animate attributeName="stroke-width" values="1;1.5;1" dur="2s" repeatCount="indefinite"/>
+                <animate attributeName="stroke-dasharray" from="0,200" to="200,0" dur="1.8s" repeatCount="indefinite"/>
+              </line>
+              <line x1="512" y1="140" x2="355" y2="64">
+                <animate attributeName="stroke" values="rgba(220,20,60,0.5);rgba(220,20,60,0.1);rgba(220,20,60,0.5)" dur="2.4s" repeatCount="indefinite"/>
+                <animate attributeName="stroke-width" values="1;1.5;1" dur="2.4s" repeatCount="indefinite"/>
+                <animate attributeName="stroke-dasharray" from="0,300" to="300,0" dur="2.2s" repeatCount="indefinite"/>
+              </line>
+              <line x1="512" y1="140" x2="110" y2="100">
+                <animate attributeName="stroke" values="rgba(220,20,60,0.3);rgba(220,20,60,0.05);rgba(220,20,60,0.3)" dur="3s" repeatCount="indefinite"/>
+                <animate attributeName="stroke-dasharray" from="0,500" to="500,0" dur="2.8s" repeatCount="indefinite"/>
+              </line>
+
+              <!-- India HQ pulse -->
+              <circle cx="512" cy="140" r="5" fill="#dc143c">
+                <animate attributeName="r" values="4;8;4" dur="1.8s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="1;0.6;1" dur="1.8s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="512" cy="140" r="15" fill="none" stroke="rgba(220,20,60,0.4)" stroke-width="1">
+                <animate attributeName="r" values="8;22;8" dur="1.8s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.8;0;0.8" dur="1.8s" repeatCount="indefinite"/>
+              </circle>
+              <text x="512" y="132" fill="rgba(255,255,255,0.9)" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">India HQ</text>
+
+              <!-- Australia -->
+              <circle cx="618" cy="204" r="4" fill="#dc143c">
+                <animate attributeName="r" values="3;6;3" dur="2.2s" repeatCount="indefinite"/>
+              </circle>
+              <text x="618" y="197" fill="rgba(255,255,255,0.7)" font-size="6.5" font-family="Inter,sans-serif" text-anchor="middle">Australia</text>
+
+              <!-- Europe -->
+              <circle cx="355" cy="64" r="4" fill="#dc143c">
+                <animate attributeName="r" values="3;6;3" dur="1.6s" repeatCount="indefinite"/>
+              </circle>
+              <text x="355" y="57" fill="rgba(255,255,255,0.7)" font-size="6.5" font-family="Inter,sans-serif" text-anchor="middle">Europe</text>
+
+              <!-- USA -->
+              <circle cx="110" cy="100" r="3.5" fill="#dc143c" opacity="0.8">
+                <animate attributeName="r" values="2.5;5;2.5" dur="2.6s" repeatCount="indefinite"/>
+              </circle>
+              <text x="110" y="93" fill="rgba(255,255,255,0.6)" font-size="6.5" font-family="Inter,sans-serif" text-anchor="middle">Americas</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT — image1 (portrait) + image3 (JD Exporting) -->
+      <div class="s2r">
+        <div class="s2-portrait">
+          <img src="image6.jpg" alt="Jagath Dinesh — Professional Portrait"/>
+        </div>
+        <div class="s2-export">
+          <img src="image8.jpg" alt="JD Exporting — Global Logistics Port"/>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ▌S3 — TIMELINE -->
+  <section class="slide" id="s3">
+    <div class="si">
+      <div>
+        <div class="eyebrow">Milestones · Growth</div>
+        <h2 class="sh">Developments Timeline</h2>
+      </div>
+      <div class="tl-grid">
+        <div class="tlc">
+          <div class="tl-dot"></div>
+          <div class="tl-yr">2030</div>
+          <h3>Inception of JD Groups</h3>
+          <p>Founded with a bold blueprint to revolutionize engineering, resource extraction, and global logistics from the ground up.</p>
+        </div>
+        <div class="tlc">
+          <div class="tl-dot"></div>
+          <div class="tl-yr">2032</div>
+          <h3>Global Market Entry</h3>
+          <p>Opened international branches across Asia-Pacific, Europe, and North America — establishing JD as a true global force.</p>
+        </div>
+        <div class="tlc">
+          <div class="tl-dot"></div>
+          <div class="tl-yr">2035</div>
+          <h3>Mining Acquisitions</h3>
+          <p>Strategic takeover of large-scale heavy mining operations. JD Mining PVT. became a continental industry powerhouse.</p>
+        </div>
+        <div class="tlc">
+          <div class="tl-dot"></div>
+          <div class="tl-yr">2037</div>
+          <h3>Diversified Growth</h3>
+          <p>Ranked Top 6 in India and Top 12 globally — achieving unprecedented dominance across mining, logistics, and tech sectors.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ▌S4 — DIVISIONS (image5=Mining, image3=Exporting used as card imgs) -->
+  <section class="slide" id="s4">
+    <div class="si">
+      <div>
+        <div class="eyebrow">Enterprise · Divisions</div>
+        <h2 class="sh">Divisions under JD Groups</h2>
+      </div>
+      <div class="div-grid">
+        <!-- Mining card — image10 (JD Mining PVT) -->
+        <div class="dc">
+          <div class="dc-img">
+            <img src="image10.jpg" alt="JD Mining PVT"/>
+            <div class="dov"></div>
+          </div>
+          <div class="dc-body">
+            <div class="dc-tag">Heavy Industry</div>
+            <h3>JD Mining PVT.</h3>
+            <p>Industry-leading extraction and processing across multiple continents. Sustainable resource management redefined for the modern era with cutting-edge machinery.</p>
+            <div class="dc-stats">
+              <div class="dcs"><div class="n">12+</div><div class="l">Countries</div></div>
+              <div class="dcs"><div class="n">5,000+</div><div class="l">Employees</div></div>
+              <div class="dcs"><div class="n">$4.2B</div><div class="l">Revenue</div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Exporting card — image8 (JD Exporting port) -->
+        <div class="dc">
+          <div class="dc-img">
+            <img src="image8.jpg" alt="JD Exporting — Global Logistics"/>
+            <div class="dov"></div>
+          </div>
+          <div class="dc-body">
+            <div class="dc-tag">Global Logistics</div>
+            <h3>JD Exporting &amp; Logistics</h3>
+            <p>Connecting continents through state-of-the-art supply chains, real-time tracking, and world-class port operations spanning Dubai, Hamburg, Singapore, and beyond.</p>
+            <div class="dc-stats">
+              <div class="dcs"><div class="n">40+</div><div class="l">Ports</div></div>
+              <div class="dcs"><div class="n">200+</div><div class="l">Routes</div></div>
+              <div class="dcs"><div class="n">$2.8B</div><div class="l">Revenue</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ▌S5 — ABOUT US  (image9 = Indian Express) -->
+  <section class="slide" id="s5">
+    <div class="si">
+      <div class="s5l">
+        <div class="eyebrow">Rankings · Excellence</div>
+        <h2 class="sh">About Us &amp; Rankings</h2>
+        <p class="s5-body">JD Groups represents the pinnacle of modern enterprise. Founded by Jagath Dinesh — Electrical &amp; Computer Engineer and visionary leader — the conglomerate has risen from a bold 2030 startup to a globally respected powerhouse. With unwavering commitment to innovation, sustainability, and excellence, JD Groups continues to redefine what's possible.</p>
+        <div class="stats-g">
+          <div class="sc"><div class="sn" data-end="6" data-prefix="#">#6</div><div class="sl">Top in India</div></div>
+          <div class="sc"><div class="sn" data-end="12" data-prefix="#">#12</div><div class="sl">Global Ranking</div></div>
+          <div class="sc"><div class="sn">$7B+</div><div class="sl">Total Revenue</div></div>
+          <div class="sc"><div class="sn">40+</div><div class="sl">Countries</div></div>
+        </div>
+      </div>
+      <div class="s5r">
+        <div class="s5-img">
+          <img src="image9.jpg" alt="Indian Express — Work Hard Get Success"/>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ▌S6 — CONTACT -->
+  <section class="slide" id="s6">
+    <div class="si">
+      <div class="s6h">
+        <div class="eyebrow">Business Inquiries · Q&amp;A</div>
+        <h2 class="sh">Let's Build<br><span style="color:var(--cr)">Something Great</span></h2>
+        <p>Partner with JD Groups — a global leader in mining, logistics, and engineering. Our executive team is ready to connect with your vision.</p>
+      </div>
+      <form class="cform" onsubmit="submitForm(event)">
+        <div class="frow">
+          <div class="fg"><input type="text" placeholder="First Name" required/></div>
+          <div class="fg"><input type="text" placeholder="Last Name" required/></div>
+        </div>
+        <div class="fg"><input type="email" placeholder="Corporate Email" required/></div>
+        <div class="fg"><input type="text" placeholder="Company / Organization"/></div>
+        <div class="fg"><textarea rows="4" placeholder="Describe your inquiry or partnership interest..." required></textarea></div>
+        <button class="sbtn" id="sbtn" type="submit">Send Inquiry →</button>
+      </form>
+      <div class="cfoot">
+        <a href="mailto:contact@jdgroups.com">contact@jdgroups.com</a>
+        <span class="sep">|</span>
+        <a href="#">+61 400 000 000</a>
+        <span class="sep">|</span>
+        <a href="#">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+/* ───── ANIMATED PARTICLE BACKGROUND ───── */
+(()=>{
+  const c=document.getElementById('bgc'),x=c.getContext('2d');
+  let W,H,P=[];
+  const N=55,CR='rgba(220,20,60,';
+  const res=()=>{W=c.width=innerWidth;H=c.height=innerHeight};
+  const rand=(a,b)=>a+Math.random()*(b-a);
+  const init=()=>{
+    P=[];
+    for(let i=0;i<N;i++) P.push({
+      x:rand(0,W),y:rand(0,H),
+      vx:rand(-.28,.28),vy:rand(-.28,.28),
+      r:rand(.8,2.2),a:rand(.08,.45),
+      red:Math.random()<.22
+    });
+  };
+  const draw=()=>{
+    // gradient bg
+    const g=x.createLinearGradient(0,0,W,H);
+    g.addColorStop(0,'#07070b');g.addColorStop(.5,'#0d0812');g.addColorStop(1,'#07070b');
+    x.fillStyle=g;x.fillRect(0,0,W,H);
+    P.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0)p.x=W;if(p.x>W)p.x=0;
+      if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+      x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);
+      x.fillStyle=p.red?CR+p.a+')':'rgba(255,255,255,'+(p.a*.35)+')';
+      x.fill();
+      P.forEach(q=>{
+        const dx=p.x-q.x,dy=p.y-q.y,d=Math.sqrt(dx*dx+dy*dy);
+        if(d<110){
+          x.beginPath();x.moveTo(p.x,p.y);x.lineTo(q.x,q.y);
+          const al=(1-d/110)*.045;
+          x.strokeStyle=(p.red||q.red)?CR+al+')':'rgba(255,255,255,'+(al*.5)+')';
+          x.lineWidth=.5;x.stroke();
+        }
+      });
+    });
+    requestAnimationFrame(draw);
+  };
+  addEventListener('resize',()=>{res();init()});
+  res();init();draw();
+})();
+
+/* ───── NAV + SCROLL SYNC ───── */
+const main=document.getElementById('main');
+const slides=[...document.querySelectorAll('.slide')];
+const navAs=[...document.querySelectorAll('nav a')];
+const dots=[...document.querySelectorAll('.dot')];
+
+function setActive(i){
+  navAs.forEach((a,j)=>a.classList.toggle('active',i===j));
+  dots.forEach((d,j)=>d.classList.toggle('on',i===j));
+}
+
+main.addEventListener('scroll',()=>{
+  let cur=0;
+  slides.forEach((s,i)=>{if(main.scrollTop>=s.offsetTop-s.clientHeight*.35)cur=i;});
+  setActive(cur);
+});
+
+navAs.forEach(a=>a.addEventListener('click',e=>{
+  e.preventDefault();
+  document.querySelector(a.getAttribute('href')).scrollIntoView({behavior:'smooth'});
+}));
+
+dots.forEach((d,i)=>d.addEventListener('click',()=>slides[i].scrollIntoView({behavior:'smooth'})));
+
+document.addEventListener('keydown',e=>{
+  const cur=slides.findIndex(s=>{const r=s.getBoundingClientRect();return r.top>=-10&&r.top<innerHeight*.5;});
+  if(e.key==='ArrowDown'||e.key==='PageDown'){e.preventDefault();if(cur<slides.length-1)slides[cur+1].scrollIntoView({behavior:'smooth'});}
+  else if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();if(cur>0)slides[cur-1].scrollIntoView({behavior:'smooth'});}
+});
+
+/* ───── CONTACT FORM ───── */
+function submitForm(e){
+  e.preventDefault();
+  const b=document.getElementById('sbtn');
+  b.textContent='✓ Message Sent!';b.style.background='#22c55e';b.disabled=true;
+  setTimeout(()=>{b.textContent='Send Inquiry →';b.style.background='';b.disabled=false;e.target.reset();},3000);
+}
+
+/* ───── CSS bounce keyframe ───── */
+const style=document.createElement('style');
+style.textContent='@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}';
+document.head.appendChild(style);
+</script>
+</body>
+</html>
